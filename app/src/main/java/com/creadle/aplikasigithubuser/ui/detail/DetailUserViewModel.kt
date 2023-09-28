@@ -27,7 +27,7 @@ class DetailUserViewModel: ViewModel() {
                 }
 
                 override fun onFailure(call: Call<DetailUserResponse>, t: Throwable) {
-                    Log.e("MainViewModel", "onFailure: ${t.message}")
+                    Log.e("DetailUserViewModel", "onFailure: ${t.message}")
                 }
 
             })

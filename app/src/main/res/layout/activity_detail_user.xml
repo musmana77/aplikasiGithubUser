@@ -8,8 +8,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_profile"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+        android:layout_width="205dp"
+        android:layout_height="205dp"
         android:layout_marginTop="18dp"
         tools:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="12dp"
         android:textSize="24sp"
         tools:text="Textview"
         app:layout_constraintEnd_toEndOf="@+id/iv_profile"

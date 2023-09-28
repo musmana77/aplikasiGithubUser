@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.creadle.aplikasigithubuser.data.response.User
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Toast.makeText(applicationContext, "Develop by Github musmana77", Toast.LENGTH_SHORT).show()
+
 
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()

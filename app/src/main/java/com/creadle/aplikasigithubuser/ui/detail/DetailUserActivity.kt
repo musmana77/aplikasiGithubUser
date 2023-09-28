@@ -22,6 +22,8 @@ class DetailUserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val username = intent.getStringExtra(EXTRA_USERNAME)
+        val bundle = Bundle()
+        bundle.putString(EXTRA_USERNAME, username)
 
         viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
 
@@ -30,7 +32,7 @@ class DetailUserActivity : AppCompatActivity() {
             viewModel.getUserDetail().observe(this, {
                 if (it != null){
                     binding.apply {
-                        tvName.text = it.name
+                        tvName.text = it.name ?:"User ini belum mengisi nama"
                         tvUsername.text =it.login
                         tvFollowers.text = "${it.followers} Followers"
                         tvFollowing.text = "${it.following} Following"
@@ -43,7 +45,7 @@ class DetailUserActivity : AppCompatActivity() {
             })
         }
 
-        val sectionPagerAdapter = SectionPagerAdapter(this, supportFragmentManager)
+        val sectionPagerAdapter = SectionPagerAdapter(this, supportFragmentManager, bundle)
         binding.apply {
             viewPager.adapter = sectionPagerAdapter
             tabs.setupWithViewPager(viewPager)

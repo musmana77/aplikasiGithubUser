@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">AplikasiGithubUser</string>
     <string name="username">Username</string>
-    <string name="base_url">https://api.github.com/</string>
     <string name="searchbar_hint">Masukkan kata</string>
-    <string name="placeholder">placeholder</string>
     <string name="tab_1">Followers</string>
     <string name="tab_2">Following</string>
+    <string name="icon_github">icon github free</string>
 </resources>
