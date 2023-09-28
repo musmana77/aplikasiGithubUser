@@ -1,12 +1,14 @@
-package com.creadle.aplikasigithubuser.ui
+package com.creadle.aplikasigithubuser.ui.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.creadle.aplikasigithubuser.data.response.User
 import com.creadle.aplikasigithubuser.databinding.ActivityMainBinding
+import com.creadle.aplikasigithubuser.ui.detail.DetailUserActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +24,18 @@ class MainActivity : AppCompatActivity() {
 
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
+
+        adapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
+            override fun onItemCliked(data: User) {
+                Intent(this@MainActivity, DetailUserActivity::class.java).also{
+                    it.putExtra(DetailUserActivity.EXTRA_USERNAME, data.login)
+                    startActivity(it)
+                }
+            }
+
+        })
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            MainViewModel::class.java)
 
         binding.apply {
             rvGithub.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -40,15 +53,25 @@ class MainActivity : AppCompatActivity() {
                 }
 
         }
+        initialSearch()
 
         viewModel.getSearchUsers().observe(this,{
             if (it != null){
                 adapter.setList(it)
                 showLoading(false)
+
         }
         })
 
      }
+
+    private fun initialSearch(){
+        binding.apply {
+            val query = ("musmana")
+            showLoading(true)
+            viewModel.setSearchUsers(query)
+        }
+    }
     private fun searchUser(){
         binding.apply {
             val query = searchView.text.toString()

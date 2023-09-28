@@ -1,6 +1,6 @@
-package com.creadle.aplikasigithubuser.ui
+package com.creadle.aplikasigithubuser.ui.main
 
-import android.content.ContentValues.TAG
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

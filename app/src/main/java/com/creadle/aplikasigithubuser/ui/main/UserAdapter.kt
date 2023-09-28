@@ -1,17 +1,21 @@
-package com.creadle.aplikasigithubuser.ui
+package com.creadle.aplikasigithubuser.ui.main
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.creadle.aplikasigithubuser.data.response.User
 import com.creadle.aplikasigithubuser.databinding.ItemUserBinding
 
 class UserAdapter :  RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
     private val list = ArrayList<User>()
+
+    private var onItemClickCallback: OnItemClickCallback? = null
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     fun setList(users: ArrayList<User>){
         list.clear()
@@ -21,10 +25,12 @@ class UserAdapter :  RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
     inner  class UserViewHolder(val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(user: User){
+            binding.root.setOnClickListener{
+                onItemClickCallback?.onItemCliked(user)
+            }
             binding.apply {
                 Glide.with(itemView)
                     .load(user.avatar_url)
-                    .transition(DrawableTransitionOptions.withCrossFade())
                     .optionalCenterCrop()
                     .into(ivUser)
                 tvUsername.text = user.login
@@ -42,6 +48,10 @@ class UserAdapter :  RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
     }
 
     override fun getItemCount(): Int = list.size
+
+    interface OnItemClickCallback{
+        fun onItemCliked(data: User)
+    }
 
 
 
