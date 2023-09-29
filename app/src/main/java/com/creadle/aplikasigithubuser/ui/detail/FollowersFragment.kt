@@ -9,9 +9,9 @@ import com.creadle.aplikasigithubuser.R
 import com.creadle.aplikasigithubuser.databinding.FragmentFollowBinding
 import com.creadle.aplikasigithubuser.ui.main.UserAdapter
 
-class FollowersFragement:Fragment(R.layout.fragment_follow) {
+class FollowersFragment : Fragment(R.layout.fragment_follow) {
 
-    private var _binding : FragmentFollowBinding? = null
+    private var _binding: FragmentFollowBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: FollowersViewModel
     private lateinit var adapter: UserAdapter
@@ -33,10 +33,10 @@ class FollowersFragement:Fragment(R.layout.fragment_follow) {
             rvGithub.adapter = adapter
         }
         showLoading(true)
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowersViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FollowersViewModel::class.java)
         viewModel.setListFollowers(username)
         viewModel.getListFollowers().observe(viewLifecycleOwner, {
-            if (it != null){
+            if (it != null) {
                 adapter.setList(it)
                 showLoading(false)
             }
@@ -45,17 +45,13 @@ class FollowersFragement:Fragment(R.layout.fragment_follow) {
     }
 
     override fun onDestroyView() {
-         super.onDestroyView()
+        super.onDestroyView()
         _binding = null
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
-            binding.progressBar.visibility = View.VISIBLE
-        }else{
-            binding.progressBar.visibility = View.GONE
-        }
-
+    private fun showLoading(state: Boolean) {
+        if (state) { binding.progressBar.visibility = View.VISIBLE }
+        else { binding.progressBar.visibility = View.GONE }
     }
 
 }

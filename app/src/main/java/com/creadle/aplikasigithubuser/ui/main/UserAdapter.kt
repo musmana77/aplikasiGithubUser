@@ -26,7 +26,7 @@ class UserAdapter :  RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
     inner  class UserViewHolder(val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(user: User){
             binding.root.setOnClickListener{
-                onItemClickCallback?.onItemCliked(user)
+                onItemClickCallback?.onItemClicked(user)
             }
             binding.apply {
                 Glide.with(itemView)
@@ -50,7 +50,7 @@ class UserAdapter :  RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickCallback{
-        fun onItemCliked(data: User)
+        fun onItemClicked(data: User)
     }
 
 

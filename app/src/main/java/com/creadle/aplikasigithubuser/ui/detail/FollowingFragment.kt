@@ -9,7 +9,7 @@ import com.creadle.aplikasigithubuser.R
 import com.creadle.aplikasigithubuser.databinding.FragmentFollowBinding
 import com.creadle.aplikasigithubuser.ui.main.UserAdapter
 
-class FollowingFragement:Fragment(R.layout.fragment_follow) {
+class FollowingFragment:Fragment(R.layout.fragment_follow) {
 
     private var _binding : FragmentFollowBinding? = null
     private val binding get() = _binding!!
@@ -33,7 +33,7 @@ class FollowingFragement:Fragment(R.layout.fragment_follow) {
             rvGithub.adapter = adapter
         }
         showLoading(true)
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FollowingViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FollowingViewModel::class.java)
         viewModel.setListFollowing(username)
         viewModel.getListFollowing().observe(viewLifecycleOwner, {
             if (it != null){

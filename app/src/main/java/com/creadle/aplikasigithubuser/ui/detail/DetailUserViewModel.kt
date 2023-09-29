@@ -5,16 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.creadle.aplikasigithubuser.data.response.DetailUserResponse
-import com.creadle.aplikasigithubuser.data.retrofit.RetrofitClient
+import com.creadle.aplikasigithubuser.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetailUserViewModel: ViewModel() {
-    val user = MutableLiveData<DetailUserResponse>()
+    private val user = MutableLiveData<DetailUserResponse>()
 
     fun setUserDetail(username: String){
-        RetrofitClient.apiInstance
+        ApiConfig.apiServiceInstance
             .getUserDetail(username)
             .enqueue(object : Callback<DetailUserResponse>{
                 override fun onResponse(
@@ -33,7 +33,7 @@ class DetailUserViewModel: ViewModel() {
             })
     }
 
-    fun getUserDetail() : LiveData<DetailUserResponse>{
+    fun getUserDetailLiveData() : LiveData<DetailUserResponse>{
         return user
     }
 }

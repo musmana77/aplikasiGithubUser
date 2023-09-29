@@ -7,15 +7,14 @@ import com.bumptech.glide.Glide
 import com.creadle.aplikasigithubuser.databinding.ActivityDetailUserBinding
 
 
-
 class DetailUserActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val EXTRA_USERNAME = "extra_username"
     }
 
-    private lateinit var binding : ActivityDetailUserBinding
-    private  lateinit var viewModel: DetailUserViewModel
+    private lateinit var binding: ActivityDetailUserBinding
+    private lateinit var viewModel: DetailUserViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
@@ -25,15 +24,18 @@ class DetailUserActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString(EXTRA_USERNAME, username)
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(DetailUserViewModel::class.java)
 
         if (username != null) {
             viewModel.setUserDetail(username)
-            viewModel.getUserDetail().observe(this, {
-                if (it != null){
+            viewModel.getUserDetailLiveData().observe(this, {userDetail ->
+                userDetail?.let{
                     binding.apply {
-                        tvName.text = it.name ?:"User ini belum mengisi nama"
-                        tvUsername.text =it.login
+                        tvName.text = it.name ?: "User ini belum mengisi nama"
+                        tvUsername.text = it.login
                         tvFollowers.text = "${it.followers} Followers"
                         tvFollowing.text = "${it.following} Following"
                         Glide.with(this@DetailUserActivity)

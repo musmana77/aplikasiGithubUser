@@ -19,13 +19,12 @@ class SectionPagerAdapter(private val mCtx: Context, fm: FragmentManager, data: 
     override fun getCount(): Int = 2
 
     override fun getItem(position: Int): Fragment {
-        var fragment: Fragment? = null
-        when(position){
-            0-> fragment =FollowersFragement()
-            1-> fragment =FollowingFragement()
-        }
-        fragment?.arguments = this.fragmentBundle
-        return  fragment as Fragment
+       return when(position){
+            0-> FollowersFragment()
+            1-> FollowingFragment()
+           else -> throw IllegalArgumentException("Invalid position: $position")
+        }.apply { arguments = fragmentBundle }
+
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

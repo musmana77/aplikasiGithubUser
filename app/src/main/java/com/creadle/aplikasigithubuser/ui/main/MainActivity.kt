@@ -3,6 +3,7 @@ package com.creadle.aplikasigithubuser.ui.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: UserAdapter
 
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
 
         adapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
-            override fun onItemCliked(data: User) {
+            override fun onItemClicked(data: User) {
                 Intent(this@MainActivity, DetailUserActivity::class.java).also{
                     it.putExtra(DetailUserActivity.EXTRA_USERNAME, data.login)
                     startActivity(it)
@@ -68,6 +70,17 @@ class MainActivity : AppCompatActivity() {
 
      }
 
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Tekan sekali lagi untuk keluar",Toast.LENGTH_SHORT).show()
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 1700)
+
+    }
+
     private fun initialSearch(){
         binding.apply {
             val query = ("musmana")
@@ -90,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         }else{
             binding.progressBar.visibility = View.GONE
         }
-
     }
 }
 
