@@ -1,6 +1,8 @@
 package com.creadle.aplikasigithubuser.ui.detail
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,9 @@ class FollowersFragment : Fragment(R.layout.fragment_follow) {
     private lateinit var viewModel: FollowersViewModel
     private lateinit var adapter: UserAdapter
     private lateinit var username: String
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val interval = 1500L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,14 +39,26 @@ class FollowersFragment : Fragment(R.layout.fragment_follow) {
         }
         showLoading(true)
         viewModel = ViewModelProvider(this).get(FollowersViewModel::class.java)
-        viewModel.setListFollowers(username)
-        viewModel.getListFollowers().observe(viewLifecycleOwner, {
-            if (it != null) {
-                adapter.setList(it)
-                showLoading(false)
-            }
-        })
 
+
+        val fetchFollowersData = object : Runnable {
+            override fun run() {
+                viewModel.setListFollowers(username)
+                viewModel.getListFollowers().observe(viewLifecycleOwner, { followers ->
+                    followers?.let {
+                        adapter.setList(it)
+                        showLoading(false)
+                    }
+                })
+
+
+                if (viewModel.getListFollowers().value == null) {
+
+                    handler.postDelayed(this, interval)
+                }
+            }
+        }
+        handler.post(fetchFollowersData)
     }
 
     override fun onDestroyView() {
@@ -53,5 +70,4 @@ class FollowersFragment : Fragment(R.layout.fragment_follow) {
         if (state) { binding.progressBar.visibility = View.VISIBLE }
         else { binding.progressBar.visibility = View.GONE }
     }
-
 }

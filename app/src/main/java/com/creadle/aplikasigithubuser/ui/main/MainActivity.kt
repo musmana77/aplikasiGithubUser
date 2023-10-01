@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         Toast.makeText(applicationContext, "Develop by Github musmana77", Toast.LENGTH_SHORT).show()
 
+        binding.progressBarSV.visibility = View.GONE
 
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()
@@ -51,9 +52,18 @@ class MainActivity : AppCompatActivity() {
             searchView
                 .editText
                 .setOnEditorActionListener { textView, actionId, event ->
-                    searchView.hide()
-                    searchBar.text = searchView.text
+                    showLoadingSV(true)
                     searchUser()
+                    searchBar.text = searchView.text
+
+                    viewModel.getSearchUsers().observe(this@MainActivity, { searchResult ->
+                        if (searchResult != null) {
+                            Handler().postDelayed({
+                                searchView.hide()
+                            }, 400)
+                        }
+                    })
+
                     false
                 }
 
@@ -78,7 +88,6 @@ class MainActivity : AppCompatActivity() {
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Tekan sekali lagi untuk keluar",Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 1700)
-
     }
 
     private fun initialSearch(){
@@ -87,21 +96,40 @@ class MainActivity : AppCompatActivity() {
             showLoading(true)
             viewModel.setSearchUsers(query)
         }
+
     }
+
     private fun searchUser(){
+
         binding.apply {
             val query = searchView.text.toString()
             if (query.isEmpty()) return
-            showLoading(true)
             viewModel.setSearchUsers(query)
+            showLoadingSV(false)
         }
     }
+
 
     private fun showLoading(state: Boolean){
         if (state){
             binding.progressBar.visibility = View.VISIBLE
         }else{
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showLoadingSV(state: Boolean){
+        if (state){
+            binding.progressBarSV.visibility = View.VISIBLE
+        }else{
+            viewModel.getSearchUsers().observe(this@MainActivity, { searchResult ->
+                if (searchResult != null) {
+                    Handler().postDelayed({
+                        binding.progressBarSV.visibility = View.GONE
+                    }, 300)
+                }
+            })
+
         }
     }
 }

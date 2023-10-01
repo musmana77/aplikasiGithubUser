@@ -1,6 +1,8 @@
 package com.creadle.aplikasigithubuser.ui.detail
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -9,13 +11,16 @@ import com.creadle.aplikasigithubuser.R
 import com.creadle.aplikasigithubuser.databinding.FragmentFollowBinding
 import com.creadle.aplikasigithubuser.ui.main.UserAdapter
 
-class FollowingFragment:Fragment(R.layout.fragment_follow) {
+class FollowingFragment : Fragment(R.layout.fragment_follow) {
 
-    private var _binding : FragmentFollowBinding? = null
+    private var _binding: FragmentFollowBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: FollowingViewModel
     private lateinit var adapter: UserAdapter
     private lateinit var username: String
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val interval = 1500L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,14 +39,24 @@ class FollowingFragment:Fragment(R.layout.fragment_follow) {
         }
         showLoading(true)
         viewModel = ViewModelProvider(this).get(FollowingViewModel::class.java)
-        viewModel.setListFollowing(username)
-        viewModel.getListFollowing().observe(viewLifecycleOwner, {
-            if (it != null){
-                adapter.setList(it)
-                showLoading(false)
-            }
-        })
 
+        val fetchFollowingData = object : Runnable {
+            override fun run() {
+                viewModel.setListFollowing(username)
+                viewModel.getListFollowing().observe(viewLifecycleOwner, { followers ->
+                    followers?.let {
+                        adapter.setList(it)
+                        showLoading(false)
+                    }
+                })
+             
+                if (viewModel.getListFollowing().value == null) {
+            
+                    handler.postDelayed(this, interval)
+                }
+            }
+        }
+        handler.post(fetchFollowingData)
     }
 
     override fun onDestroyView() {
@@ -49,13 +64,8 @@ class FollowingFragment:Fragment(R.layout.fragment_follow) {
         _binding = null
     }
 
-    private fun showLoading(state: Boolean){
-        if (state){
-            binding.progressBar.visibility = View.VISIBLE
-        }else{
-            binding.progressBar.visibility = View.GONE
-        }
-
+    private fun showLoading(state: Boolean) {
+        if (state) { binding.progressBar.visibility = View.VISIBLE }
+        else { binding.progressBar.visibility = View.GONE }
     }
-
 }
