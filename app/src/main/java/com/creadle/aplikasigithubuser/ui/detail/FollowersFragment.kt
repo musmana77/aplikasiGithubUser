@@ -14,6 +14,9 @@ import com.creadle.aplikasigithubuser.ui.main.UserAdapter
 class FollowersFragment : Fragment(R.layout.fragment_follow) {
 
     private var _binding: FragmentFollowBinding? = null
+
+    private var isViewCreated = false
+
     private val binding get() = _binding!!
     private lateinit var viewModel: FollowersViewModel
     private lateinit var adapter: UserAdapter
@@ -25,6 +28,8 @@ class FollowersFragment : Fragment(R.layout.fragment_follow) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFollowBinding.bind(view)
+
+        isViewCreated = true
 
         val args = arguments
         username = args?.getString(DetailUserActivity.EXTRA_USERNAME).toString()
@@ -43,31 +48,42 @@ class FollowersFragment : Fragment(R.layout.fragment_follow) {
 
         val fetchFollowersData = object : Runnable {
             override fun run() {
-                viewModel.setListFollowers(username)
-                viewModel.getListFollowers().observe(viewLifecycleOwner, { followers ->
-                    followers?.let {
-                        adapter.setList(it)
-                        showLoading(false)
+                if (isViewCreated) {
+                    viewModel.setListFollowers(username)
+                    viewModel.getListFollowers().observe(viewLifecycleOwner, { followers ->
+                        followers?.let {
+                            adapter.setList(it)
+                            showLoading(false)
+                        }
+                    })
+
+
+                    if (viewModel.getListFollowers().value == null && isViewCreated) {
+                        handler.postDelayed(this, interval)
                     }
-                })
-
-
-                if (viewModel.getListFollowers().value == null) {
-
-                    handler.postDelayed(this, interval)
                 }
             }
         }
-        handler.post(fetchFollowersData)
+
+        if (isViewCreated){
+            handler.post(fetchFollowersData)
+        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        isViewCreated = false
+
     }
 
     private fun showLoading(state: Boolean) {
-        if (state) { binding.progressBar.visibility = View.VISIBLE }
-        else { binding.progressBar.visibility = View.GONE }
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }

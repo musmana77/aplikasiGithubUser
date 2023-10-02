@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiConfig {
+class RetrofitClient {
     companion object {
         private const val BASE_URL = "https://api.github.com/"
 
@@ -21,6 +21,6 @@ class ApiConfig {
             .client(client)
             .build()
 
-        val apiServiceInstance = retrofit.create(ApiService::class.java)
+        val apiInstance = retrofit.create(Api::class.java)
     }
 }

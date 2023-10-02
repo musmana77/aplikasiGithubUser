@@ -4,13 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.creadle.aplikasigithubuser.R
 import com.creadle.aplikasigithubuser.data.response.User
 import com.creadle.aplikasigithubuser.databinding.ActivityMainBinding
 import com.creadle.aplikasigithubuser.ui.detail.DetailUserActivity
+import com.creadle.aplikasigithubuser.ui.favorite.FavoriteActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +39,8 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClicked(data: User) {
                 Intent(this@MainActivity, DetailUserActivity::class.java).also{
                     it.putExtra(DetailUserActivity.EXTRA_USERNAME, data.login)
+                    it.putExtra(DetailUserActivity.EXTRA_ID, data.id)
+                    it.putExtra(DetailUserActivity.EXTRA_URL, data.avatar_url)
                     startActivity(it)
                 }
             }
@@ -131,6 +137,22 @@ class MainActivity : AppCompatActivity() {
             })
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.favorite_menu ->{
+                Intent(this, FavoriteActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 

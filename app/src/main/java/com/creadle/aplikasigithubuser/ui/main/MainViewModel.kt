@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.creadle.aplikasigithubuser.data.response.User
 import com.creadle.aplikasigithubuser.data.response.UserResponse
-import com.creadle.aplikasigithubuser.data.retrofit.ApiConfig
+import com.creadle.aplikasigithubuser.data.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
 
     fun setSearchUsers(query: String){
 
-        ApiConfig.apiServiceInstance
+        RetrofitClient.apiInstance
             .getSearchUsers(query)
             .enqueue(object : Callback<UserResponse>{
                 override fun onResponse(
