@@ -9,7 +9,7 @@ import com.creadle.aplikasigithubuser.data.local.FavoriteUser
 import com.creadle.aplikasigithubuser.data.local.FavoriteUserDao
 import com.creadle.aplikasigithubuser.data.local.UserDatabase
 import com.creadle.aplikasigithubuser.data.response.DetailUserResponse
-import com.creadle.aplikasigithubuser.data.retrofit.RetrofitClient
+import com.creadle.aplikasigithubuser.data.retrofit.ApiConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ class DetailUserViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun setUserDetail(username: String) {
-        RetrofitClient.apiInstance
+        ApiConfig.apiClientInstance
             .getUserDetail(username)
             .enqueue(object : Callback<DetailUserResponse> {
                 override fun onResponse(

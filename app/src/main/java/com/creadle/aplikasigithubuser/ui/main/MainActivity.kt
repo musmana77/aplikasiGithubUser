@@ -9,12 +9,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.creadle.aplikasigithubuser.R
 import com.creadle.aplikasigithubuser.data.response.User
 import com.creadle.aplikasigithubuser.databinding.ActivityMainBinding
 import com.creadle.aplikasigithubuser.ui.detail.DetailUserActivity
 import com.creadle.aplikasigithubuser.ui.favorite.FavoriteActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Toast.makeText(applicationContext, "Develop by Github musmana77", Toast.LENGTH_SHORT).show()
+
 
         binding.progressBarSV.visibility = View.GONE
 
@@ -46,8 +50,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(MainViewModel::class.java)
+
 
         binding.apply {
             rvGithub.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -74,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
         }
-        initialSearch()
+
 
         viewModel.getSearchUsers().observe(this,{
             if (it != null){
@@ -140,7 +145,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
+        initialSearch()
+        Toast.makeText(applicationContext, "Develop by Github musmana77", Toast.LENGTH_SHORT).show()
+
+        lifecycleScope.launch {
+            val isChecked = viewModel.getUIMode.first()
+            val item = menu?.findItem(R.id.action_night_mode)
+            item?.isChecked = isChecked
+            if (item != null) {
+                delay(55)
+                viewModel.setUIMode(item, isChecked)
+            }
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -151,8 +169,13 @@ class MainActivity : AppCompatActivity() {
                     startActivity(it)
                 }
             }
+            R.id.action_night_mode ->{
+                item.isChecked = !item.isChecked
+                viewModel.setUIMode(item, item.isChecked)
+                true
+            }else -> false
         }
         return super.onOptionsItemSelected(item)
     }
-}
 
+}

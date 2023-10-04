@@ -12,8 +12,8 @@
         android:layout_height="44dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/ic_heart_grey"
-        android:button="@drawable/favorite_toggle"
+        android:background="@drawable/ic_favorite_grey"
+        android:button="@drawable/favorite_toggle_follow"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textOff=""
@@ -99,7 +99,6 @@
             android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/ic_people"
             android:gravity="center_vertical"
-            android:textColor="@color/black"
             android:textSize="14sp"
             tools:text="377 followers" />
 
@@ -110,7 +109,6 @@
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/ic_people2"
             android:gravity="center_vertical"
-            android:textColor="@color/black"
             android:textSize="14sp"
             tools:text="30 following" />
 
@@ -124,7 +122,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         android:layout_marginTop="8dp"
-        app:tabTextColor="@android:color/black"
         app:tabTextAppearance="@style/TabLayoutTextStyle"/>
 
     <androidx.viewpager.widget.ViewPager

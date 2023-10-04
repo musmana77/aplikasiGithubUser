@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/favorite_menu"
+        android:title="Favorite"
+        android:icon="@drawable/ic_favorite_purple"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_night_mode"
+        android:checkable="true"
+        android:title="@string/ui_mode"
+        android:icon="@drawable/ic_day_mode"
+        app:showAsAction="always" />
+</menu>

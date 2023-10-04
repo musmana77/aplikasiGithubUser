@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.creadle.aplikasigithubuser.data.response.User
-import com.creadle.aplikasigithubuser.data.retrofit.RetrofitClient
+import com.creadle.aplikasigithubuser.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +14,7 @@ class FollowingViewModel : ViewModel() {
     val listFollowing = MutableLiveData<ArrayList<User>>()
 
     fun setListFollowing(username: String) {
-        RetrofitClient.apiInstance
+        ApiConfig.apiClientInstance
             .getFollowing(username)
             .enqueue(object : Callback<ArrayList<User>> {
                 override fun onResponse(
